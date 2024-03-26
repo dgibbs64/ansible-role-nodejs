@@ -1,0 +1,20 @@
+---
+- name: "Ensure Node.js is installed (apt)"
+  ansible.builtin.apt:
+    name: nodejs
+    state: present
+    update_cache: true
+    cache_valid_time: 3600
+  when: ansible_pkg_mgr == "apt"
+
+- name: "Ensure netdata is installed (yum)"
+  ansible.builtin.yum:
+    name: nodejs
+    state: present
+  when: ansible_pkg_mgr == "yum"
+
+- name: "Ensure netdata is installed (dnf)"
+  ansible.builtin.yum:
+    name: nodejs
+    state: present
+  when: ansible_pkg_mgr == "dnf"

@@ -1,0 +1,32 @@
+---
+- name: "Ensure /usr/share/keyrings/nodesource.gpg is removed"
+  ansible.builtin.file:
+    path: /usr/share/keyrings/nodesource.gpg
+    state: absent
+
+- name: "Remove NodeSource GPG key from APT keyring"
+  ansible.builtin.apt_key:
+    id: "68576280"
+    state: absent
+
+- name: "Ensure /etc/apt/sources.list.d/nodesource.list is removed"
+  ansible.builtin.file:
+    path: /etc/apt/sources.list.d/nodesource.list
+    state: absent
+
+- name: "Ensure /etc/apt/signing-key-nodesource-repo.asc is removed"
+  ansible.builtin.file:
+    path: /etc/apt/signing-key-nodesource-repo.asc
+    state: absent
+
+- name: "Ensure all Node.js list repository files are tidied up"
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  loop: "{{ lookup('fileglob', '/etc/apt/sources.list.d/deb_nodesource_com_node_*_x.list', wantlist=True) }}"
+
+- name: "Ensure all Node.js sources repository files are tidied up"
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  loop: "{{ lookup('fileglob', '/etc/apt/sources.list.d/nodesource-*x.sources') }}"

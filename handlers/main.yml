@@ -1,0 +1,5 @@
+---
+- name: "Update apt cache (Debian Family)"
+  become: true
+  ansible.builtin.apt:
+    update_cache: true
