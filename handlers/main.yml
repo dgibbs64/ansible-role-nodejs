@@ -2,4 +2,11 @@
 - name: "Update apt cache (Debian Family)"
   become: true
   ansible.builtin.apt:
+    clean: true
     update_cache: true
+
+- name: "Remove Node.JS"
+  become: true
+  ansible.builtin.apt:
+    name: nodejs
+    state: absent

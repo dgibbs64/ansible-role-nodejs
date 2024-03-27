@@ -1,0 +1,8 @@
+---
+- name: "Prepare"
+  hosts: all
+  gather_facts: false
+  vars:
+    nodejs_version: "21"
+  roles:
+    - role: "dgibbs64.nodejs"
