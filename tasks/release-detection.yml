@@ -1,0 +1,32 @@
+---
+- name: "Fetch JSON data from nodejs.org"
+  ansible.builtin.uri:
+    url: https://nodejs.org/download/release/index.json
+    return_content: true
+  register: response
+
+- name: "Find the current release version"
+  ansible.builtin.set_fact:
+    nodejs_version_current: "{{ response.json | json_query('[*].version') | map('regex_replace', '^v([0-9]+).*$', '\\1') | map('int') | list | max }}"
+
+- name: "Display the current release version"
+  ansible.builtin.debug:
+    msg: "The current release version is {{ nodejs_version_current }}"
+
+- name: "Find the current LTS release version"
+  ansible.builtin.set_fact:
+    nodejs_version_lts: "{{ ((response.json | selectattr('lts', 'defined') | selectattr('lts', '!=', false) | list | first).version | regex_replace('^v([0-9]+).*$', '\\1')) }}"
+
+- name: "Display the lts release version"
+  ansible.builtin.debug:
+    msg: "The lts release version is {{ nodejs_version_lts }}"
+
+- name: "Update nodejs_version to nodejs_version_current"
+  ansible.builtin.set_fact:
+    nodejs_version: "{{ nodejs_version_current }}"
+  when: nodejs_version == "current"
+
+- name: "Update nodejs_version to nodejs_version_lts"
+  ansible.builtin.set_fact:
+    nodejs_version: "{{ nodejs_version_lts }}"
+  when: nodejs_version == "lts"

@@ -8,6 +8,10 @@
     msg: "Unsupported architecture"
   when: ansible_architecture not in ['x86_64', 'aarch64', 'armv7l']
 
+- name: "Release detection"
+  ansible.builtin.include_tasks: release-detection.yml
+  when: nodejs_version == "current" or nodejs_version == "lts"
+
 - name: "Cleanup (Debian Family)"
   ansible.builtin.include_tasks: cleanup-Debian.yml
   when: ansible_os_family == "Debian"

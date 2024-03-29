@@ -1,0 +1,8 @@
+---
+- name: "Converge"
+  hosts: all
+  gather_facts: false
+  vars:
+    nodejs_version: "20"
+  roles:
+    - role: "dgibbs64.nodejs"

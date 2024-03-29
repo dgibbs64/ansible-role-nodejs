@@ -149,11 +149,11 @@
       ansible.builtin.command:
         cmd: "apt-cache policy nodejs"
       changed_when: false
-      register: result
+      register: aptcache
 
     - name: "Set available Node.js version"
       ansible.builtin.set_fact:
-        available_nodejs_version: "{{ result.stdout_lines[2].split(':')[1].strip().split(' ')[0].split('.')[0] }}"
+        available_nodejs_version: "{{ aptcache.stdout_lines[2].split(':')[1].strip().split(' ')[0].split('.')[0] }}"
 
     - name: "Display available Node.js version to install"
       ansible.builtin.debug:
