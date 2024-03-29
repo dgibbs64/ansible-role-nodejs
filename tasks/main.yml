@@ -8,6 +8,18 @@
     msg: "Unsupported architecture"
   when: ansible_architecture not in ['x86_64', 'aarch64', 'armv7l']
 
+- name: "Ensure Node.js requirements are installed"
+  ansible.builtin.apt:
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg
+      - python3-debian
+    state: present
+    update_cache: true
+    cache_valid_time: 3600
+
 - name: "Release detection"
   ansible.builtin.include_tasks: release-detection.yml
   when: nodejs_version == "current" or nodejs_version == "lts"
