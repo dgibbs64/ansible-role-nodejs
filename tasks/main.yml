@@ -11,8 +11,8 @@
 - name: "Check if distro version is supported"
   ansible.builtin.meta: end_play
   when:
-    - (ansible_os_family == 'RedHat' and ansible_distribution_version is version('6', '<='))
-    - (ansible_distribution == 'Ubuntu' and ansible_distribution_version is version('18.04', '<='))
+    - (ansible_os_family == 'RedHat' and ansible_distribution_version is version('6', '<'))
+    - (ansible_distribution == 'Ubuntu' and ansible_distribution_version is version('18.04', '<'))
 
 - name: "Ensure Node.js requirements are installed"
   ansible.builtin.apt:
