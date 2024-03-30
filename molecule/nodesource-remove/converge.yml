@@ -1,8 +1,8 @@
 ---
-- name: "Prepare"
+- name: "Converge"
   hosts: all
   gather_facts: false
   vars:
-    nodejs_version: "lts"
+    nodejs_state: absent
   roles:
     - role: "dgibbs64.nodejs"

@@ -1,18 +1,6 @@
 ---
-- name: "Ensure Node.js requirements are installed"
-  ansible.builtin.apt:
-    name:
-      - apt-transport-https
-      - ca-certificates
-      - curl
-      - gnupg
-      - python3-debian
-    state: present
-    update_cache: true
-    cache_valid_time: 3600
-
 - name: "Install Node.js from distro repos"
-  when: nodejs_version == "distro"
+  when: nodejs_version == "distro" or nodejs_state == "absent"
   block:
     - name: "Gather package facts"
       ansible.builtin.package_facts:
@@ -67,22 +55,18 @@
       ansible.builtin.command:
         cmd: "apt-cache policy nodejs"
       changed_when: false
-      register: result
-
-    - name: "Display result"
-      ansible.builtin.debug:
-        var: result
+      register: aptcache
 
     - name: "Set available Node.js version"
       ansible.builtin.set_fact:
-        available_nodejs_version: "{{ result.stdout_lines[2].split(':')[1].strip().split(' ')[0].split('.')[0] }}"
+        available_nodejs_version: "{{ aptcache.stdout_lines[2].split(':')[1].strip().split(' ')[0].split('.')[0] }}"
 
     - name: "Display available Node.js version to install"
       ansible.builtin.debug:
         msg: "Node.js {{ available_nodejs_version }} is available to install"
 
 - name: "Install Node.js from NodeSource"
-  when: nodejs_version != "distro"
+  when: nodejs_version != "distro" and nodejs_state == "present"
   block:
     - name: "Gather package facts"
       ansible.builtin.package_facts:

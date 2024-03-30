@@ -19,6 +19,7 @@
     state: present
     update_cache: true
     cache_valid_time: 3600
+  when: ansible_os_family == "Debian"
 
 - name: "Release detection"
   ansible.builtin.include_tasks: release-detection.yml
@@ -34,3 +35,8 @@
 
 - name: "Install"
   ansible.builtin.include_tasks: install.yml
+  when: nodejs_state == "present"
+
+- name: "Remove"
+  ansible.builtin.include_tasks: remove.yml
+  when: nodejs_state == "absent"

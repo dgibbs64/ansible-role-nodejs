@@ -1,2 +1,3 @@
 ---
 nodejs_version: lts
+nodejs_state: present
