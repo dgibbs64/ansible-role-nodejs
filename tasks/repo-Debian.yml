@@ -19,7 +19,7 @@
       ansible.builtin.debug:
         msg: "{{ 'Node.js ' + installed_nodejs_version + ' is installed' if installed_nodejs_version is defined and installed_nodejs_version != '' else 'Node.js is not installed' }}"
 
-    - name: "Ensure NodeSource repository is removed for Node.JS {{ nodejs_version }}"
+    - name: "Ensure NodeSource repository is removed for Node.js {{ nodejs_version }}"
       ansible.builtin.deb822_repository:
         name: "nodesource"
         uris: "https://deb.nodesource.com/node_{{ nodejs_version }}.x"
@@ -30,7 +30,7 @@
         enabled: true
       notify:
         - "Update apt cache (Debian Family)"
-        - "Remove Node.JS"
+        - "Remove Node.js"
 
     - name: "Ensure nsolid preferences are removed"
       ansible.builtin.file:
@@ -38,7 +38,7 @@
         state: absent
       notify:
         - "Update apt cache (Debian Family)"
-        - "Remove Node.JS"
+        - "Remove Node.js"
 
     - name: "Ensure Node.js preferences are removed"
       ansible.builtin.file:
@@ -46,7 +46,7 @@
         state: absent
       notify:
         - "Update apt cache (Debian Family)"
-        - "Remove Node.JS"
+        - "Remove Node.js"
 
     - name: "Flush handlers"
       ansible.builtin.meta: flush_handlers
@@ -85,7 +85,7 @@
       ansible.builtin.debug:
         msg: "{{ 'Node.js ' + installed_nodejs_version + ' is installed' if installed_nodejs_version is defined and installed_nodejs_version != '' else 'Node.js is not installed' }}"
 
-    - name: "Ensure NodeSource repository is added for Node.JS {{ nodejs_version }}"
+    - name: "Ensure NodeSource repository is added for Node.js {{ nodejs_version }}"
       ansible.builtin.deb822_repository:
         name: "nodesource"
         uris: "https://deb.nodesource.com/node_{{ nodejs_version }}.x"
@@ -96,7 +96,7 @@
         enabled: true
       notify:
         - "Update apt cache (Debian Family)"
-        - "Remove Node.JS"
+        - "Remove Node.js"
 
     - name: "Ensure nsolid preferences are set"
       ansible.builtin.copy:
@@ -110,7 +110,7 @@
         mode: "0644"
       notify:
         - "Update apt cache (Debian Family)"
-        - "Remove Node.JS"
+        - "Remove Node.js"
 
     - name: "Ensure nodejs preferences are set"
       ansible.builtin.copy:
@@ -124,7 +124,7 @@
         mode: "0644"
       notify:
         - "Update apt cache (Debian Family)"
-        - "Remove Node.JS"
+        - "Remove Node.js"
 
     - name: "Flush handlers"
       ansible.builtin.meta: flush_handlers

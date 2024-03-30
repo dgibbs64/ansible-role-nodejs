@@ -17,8 +17,8 @@
     update_cache: true
   when: ansible_pkg_mgr == 'yum'
 
-- name: "Remove Node.JS"
+- name: "Remove Node.js"
   become: true
-  ansible.builtin.apt:
+  ansible.builtin.package:
     name: nodejs
     state: absent

@@ -2,7 +2,7 @@
 galaxy_info:
   author: Daniel Gibbs
   company: none
-  description: Setup Node.JS.
+  description: Setup Node.js.
   license: MIT
   min_ansible_version: "2.12"
   namespace: dgibbs64
