@@ -1,0 +1,33 @@
+---
+- name: "Display if architecture is not supported"
+  ansible.builtin.debug:
+    msg: "{{ ansible_architecture }} architecture is not supported"
+  when: ansible_architecture not in ['x86_64', 'aarch64', 'armv7l']
+
+- name: "Skip role if architecture is not supported"
+  ansible.builtin.meta: end_play
+  when: ansible_architecture not in ['x86_64', 'aarch64', 'armv7l']
+
+- name: "Display if distro is not supported"
+  ansible.builtin.debug:
+    msg: "{{ ansible_distribution }} is not supported"
+  when:
+    - (ansible_os_family == 'RedHat' and ansible_distribution_version is version('6', '<=')) or (ansible_distribution == 'Ubuntu' and ansible_distribution_version is version('18.04', '<='))
+
+- name: "Skip role if distro version is supported"
+  ansible.builtin.meta: end_play
+  when:
+    - (ansible_os_family == 'RedHat' and ansible_distribution_version is version('6', '<=')) or (ansible_distribution == 'Ubuntu' and ansible_distribution_version is version('18.04', '<='))
+
+- name: "Ensure Node.js requirements are installed (apt)"
+  ansible.builtin.apt:
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg
+      - python3-debian
+    state: present
+    update_cache: true
+    cache_valid_time: 3600
+  when: ansible_pkg_mgr == "apt"

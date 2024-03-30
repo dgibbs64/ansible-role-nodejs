@@ -1,0 +1,54 @@
+---
+- name: "Gather package facts"
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: "Set if Node.js is installed"
+  ansible.builtin.set_fact:
+    nodejs_installed: ansible_facts.packages is defined and 'nodejs' in ansible_facts.packages
+
+- name: "Set installed Node.js version"
+  ansible.builtin.set_fact:
+    installed_nodejs_version: "{{ ansible_facts.packages['nodejs'][0].version.split('.')[0] }}"
+  when: nodejs_installed and 'nodejs' in ansible_facts.packages
+
+- name: "Display installed Node.js version"
+  ansible.builtin.debug:
+    msg: "{{ 'Node.js ' + installed_nodejs_version + ' is installed' if installed_nodejs_version is defined and installed_nodejs_version != '' else 'Node.js is not installed' }}"
+
+- name: "Enabled Node.js repo key is present"
+  ansible.builtin.rpm_key:
+    key: https://rpm.nodesource.com/gpgkey/ns-operations-public.key
+    state: present
+  notify:
+    - "Update dnf cache"
+    - "Update yum cache"
+
+- name: "Ensure NodeSource repository is added for Node.JS {{ nodejs_version }}"
+  ansible.builtin.yum_repository:
+    baseurl: "https://rpm.nodesource.com/pub_{{ nodejs_version }}/nodistro/nodejs/{{ ansible_architecture }}"
+    description: "Node.js Packages for Linux RPM based distros - {{ ansible_architecture }}"
+    enabled: true
+    file: "nodesource-nodejs"
+    gpgcheck: true
+    gpgkey: https://rpm.nodesource.com/gpgkey/ns-operations-public.key
+    module_hotfixes: true
+    name: "nodesource-nodejs"
+    priority: 9
+    state: present
+  notify:
+    - "Update dnf cache"
+    - "Update yum cache"
+
+- name: "Flush handlers"
+  ansible.builtin.meta: flush_handlers
+
+- name: "Display /etc/yum.repos.d/nodesource-nodejs.repo"
+  ansible.builtin.shell:
+    cmd: cat /etc/yum.repos.d/nodesource-nodejs.repo
+  register: nodesource_nodejs_repo
+  changed_when: false
+
+- name: "Display Node.js repository configuration"
+  ansible.builtin.debug:
+    msg: "{{ nodesource_nodejs_repo.stdout_lines }}"

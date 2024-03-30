@@ -7,14 +7,31 @@
     cache_valid_time: 3600
   when: ansible_pkg_mgr == "apt"
 
-- name: "Ensure netdata is installed (yum)"
+- name: "Ensure Node.js is installed (yum)"
   ansible.builtin.yum:
     name: nodejs
     state: present
   when: ansible_pkg_mgr == "yum"
 
-- name: "Ensure netdata is installed (dnf)"
+- name: "Ensure Node.js is installed (dnf)"
   ansible.builtin.yum:
     name: nodejs
     state: present
   when: ansible_pkg_mgr == "dnf"
+
+- name: "Gather package facts"
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: "Set if Node.js is installed"
+  ansible.builtin.set_fact:
+    nodejs_installed: ansible_facts.packages is defined and 'nodejs' in ansible_facts.packages
+
+- name: "Set installed Node.js version"
+  ansible.builtin.set_fact:
+    installed_nodejs_version: "{{ ansible_facts.packages['nodejs'][0].version.split('.')[0] }}"
+  when: nodejs_installed and 'nodejs' in ansible_facts.packages
+
+- name: "Display installed Node.js version"
+  ansible.builtin.debug:
+    msg: "{{ 'Node.js ' + installed_nodejs_version + ' is installed' if installed_nodejs_version is defined and installed_nodejs_version != '' else 'Node.js is not installed' }}"
