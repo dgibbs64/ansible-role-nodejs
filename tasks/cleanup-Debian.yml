@@ -19,14 +19,26 @@
     path: /etc/apt/signing-key-nodesource-repo.asc
     state: absent
 
+- name: "Find all Node.js list repository files"
+  ansible.builtin.find:
+    paths: "/etc/apt/sources.list.d"
+    patterns: "deb_nodesource_com_node_*_x.list"
+  register: files_to_remove
+
 - name: "Ensure all Node.js list repository files are tidied up"
   ansible.builtin.file:
-    path: "{{ item }}"
+    path: "{{ item.path }}"
     state: absent
-  loop: "{{ lookup('fileglob', '/etc/apt/sources.list.d/deb_nodesource_com_node_*_x.list', wantlist=True) }}"
+  loop: "{{ files_to_remove.files }}"
+
+- name: "Find all Node.js sources repository files"
+  ansible.builtin.find:
+    paths: "/etc/apt/sources.list.d"
+    patterns: "nodesource-*x.sources"
+  register: files_to_remove
 
 - name: "Ensure all Node.js sources repository files are tidied up"
   ansible.builtin.file:
-    path: "{{ item }}"
+    path: "{{ item.path }}"
     state: absent
-  loop: "{{ lookup('fileglob', '/etc/apt/sources.list.d/nodesource-*x.sources') }}"
+  loop: "{{ files_to_remove.files }}"

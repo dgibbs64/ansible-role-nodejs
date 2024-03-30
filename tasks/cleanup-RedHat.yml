@@ -1,1 +1,10 @@
 ---
+- name: "Ensure nodesource-el8.repo is removed"
+  ansible.builtin.file:
+    path: /etc/yum.repos.d/nodesource-el8.repo
+    state: absent
+
+- name: "Ensure nodesource-el9.repo is removed"
+  ansible.builtin.file:
+    path: /etc/yum.repos.d/nodesource-el9.repo
+    state: absent

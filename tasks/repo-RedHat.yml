@@ -26,7 +26,7 @@
 
 - name: "Ensure NodeSource repository is added for Node.js {{ nodejs_version }}"
   ansible.builtin.yum_repository:
-    baseurl: "https://rpm.nodesource.com/pub_{{ nodejs_version }}/nodistro/nodejs/{{ ansible_architecture }}"
+    baseurl: "https://rpm.nodesource.com/pub_{{ nodejs_version }}.x/nodistro/nodejs/{{ ansible_architecture }}"
     description: "Node.js Packages for Linux RPM based distros - {{ ansible_architecture }}"
     enabled: true
     file: "nodesource-nodejs"

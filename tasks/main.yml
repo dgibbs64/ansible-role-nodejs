@@ -14,9 +14,9 @@
   ansible.builtin.include_tasks: cleanup-Debian.yml
   when: ansible_os_family == "Debian"
 
-# - name: "Cleanup (RedHat Family)"
-#   ansible.builtin.include_tasks: cleanup-RedHat.yml
-#   when: ansible_os_family == "RedHat"
+- name: "Cleanup (RedHat Family)"
+  ansible.builtin.include_tasks: cleanup-RedHat.yml
+  when: ansible_os_family == "RedHat"
 
 - name: "Configure repository (Debian Family)"
   ansible.builtin.include_tasks: repo-Debian.yml
