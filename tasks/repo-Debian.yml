@@ -1,24 +1,24 @@
 ---
-- name: "Install Node.js from distro repos"
+- name: "Gather package facts"
+  ansible.builtin.package_facts:
+    manager: auto
+
+- name: "Set if Node.js is installed"
+  ansible.builtin.set_fact:
+    nodejs_installed: ansible_facts.packages is defined and 'nodejs' in ansible_facts.packages
+
+- name: "Set installed Node.js version"
+  ansible.builtin.set_fact:
+    installed_nodejs_version: "{{ ansible_facts.packages['nodejs'][0].version.split('.')[0] }}"
+  when: nodejs_installed and 'nodejs' in ansible_facts.packages
+
+- name: "Display installed Node.js version"
+  ansible.builtin.debug:
+    msg: "{{ 'Node.js ' + installed_nodejs_version + ' is installed' if installed_nodejs_version is defined and installed_nodejs_version != '' else 'Node.js is not installed' }}"
+
+- name: "Remove Nodesource repository"
   when: nodejs_version == "distro" or nodejs_state == "absent"
   block:
-    - name: "Gather package facts"
-      ansible.builtin.package_facts:
-        manager: auto
-
-    - name: "Set if Node.js is installed"
-      ansible.builtin.set_fact:
-        nodejs_installed: ansible_facts.packages is defined and 'nodejs' in ansible_facts.packages
-
-    - name: "Set installed Node.js version"
-      ansible.builtin.set_fact:
-        installed_nodejs_version: "{{ ansible_facts.packages['nodejs'][0].version.split('.')[0] }}"
-      when: nodejs_installed and 'nodejs' in ansible_facts.packages
-
-    - name: "Display installed Node.js version"
-      ansible.builtin.debug:
-        msg: "{{ 'Node.js ' + installed_nodejs_version + ' is installed' if installed_nodejs_version is defined and installed_nodejs_version != '' else 'Node.js is not installed' }}"
-
     - name: "Ensure NodeSource repository is removed for Node.js {{ nodejs_version }}"
       ansible.builtin.deb822_repository:
         name: "nodesource"
@@ -29,15 +29,7 @@
         state: absent
         enabled: true
       notify:
-        - "Update apt cache (Debian Family)"
-        - "Remove Node.js"
-
-    - name: "Ensure nsolid preferences are removed"
-      ansible.builtin.file:
-        path: /etc/apt/preferences.d/nsolid
-        state: absent
-      notify:
-        - "Update apt cache (Debian Family)"
+        - "Update apt cache"
         - "Remove Node.js"
 
     - name: "Ensure Node.js preferences are removed"
@@ -45,7 +37,7 @@
         path: /etc/apt/preferences.d/nodejs
         state: absent
       notify:
-        - "Update apt cache (Debian Family)"
+        - "Update apt cache"
         - "Remove Node.js"
 
     - name: "Flush handlers"
@@ -65,26 +57,9 @@
       ansible.builtin.debug:
         msg: "Node.js {{ available_nodejs_version }} is available to install"
 
-- name: "Install Node.js from NodeSource"
+- name: "Add Nodesource repository"
   when: nodejs_version != "distro" and nodejs_state == "present"
   block:
-    - name: "Gather package facts"
-      ansible.builtin.package_facts:
-        manager: auto
-
-    - name: "Set if Node.js is installed"
-      ansible.builtin.set_fact:
-        nodejs_installed: ansible_facts.packages is defined and 'nodejs' in ansible_facts.packages
-
-    - name: "Set installed Node.js version"
-      ansible.builtin.set_fact:
-        installed_nodejs_version: "{{ ansible_facts.packages['nodejs'][0].version.split('.')[0] }}"
-      when: nodejs_installed and 'nodejs' in ansible_facts.packages
-
-    - name: "Display installed Node.js version"
-      ansible.builtin.debug:
-        msg: "{{ 'Node.js ' + installed_nodejs_version + ' is installed' if installed_nodejs_version is defined and installed_nodejs_version != '' else 'Node.js is not installed' }}"
-
     - name: "Ensure NodeSource repository is added for Node.js {{ nodejs_version }}"
       ansible.builtin.deb822_repository:
         name: "nodesource"
@@ -95,21 +70,7 @@
         state: present
         enabled: true
       notify:
-        - "Update apt cache (Debian Family)"
-        - "Remove Node.js"
-
-    - name: "Ensure nsolid preferences are set"
-      ansible.builtin.copy:
-        dest: /etc/apt/preferences.d/nsolid
-        content: |
-          Package: nsolid
-          Pin: origin deb.nodesource.com
-          Pin-Priority: 600
-        owner: root
-        group: root
-        mode: "0644"
-      notify:
-        - "Update apt cache (Debian Family)"
+        - "Update apt cache"
         - "Remove Node.js"
 
     - name: "Ensure nodejs preferences are set"
@@ -123,7 +84,7 @@
         group: root
         mode: "0644"
       notify:
-        - "Update apt cache (Debian Family)"
+        - "Update apt cache"
         - "Remove Node.js"
 
     - name: "Flush handlers"

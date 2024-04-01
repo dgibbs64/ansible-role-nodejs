@@ -16,44 +16,92 @@
   ansible.builtin.debug:
     msg: "{{ 'Node.js ' + installed_nodejs_version + ' is installed' if installed_nodejs_version is defined and installed_nodejs_version != '' else 'Node.js is not installed' }}"
 
-- name: "Enabled Node.js repo key is present"
-  ansible.builtin.rpm_key:
-    key: https://rpm.nodesource.com/gpgkey/ns-operations-public.key
-    state: present
-  notify:
-    - "Update dnf cache"
-    - "Update yum cache"
+- name: "Remove Nodesource repository"
+  when: nodejs_version == "distro" or nodejs_state == "absent"
+  block:
+    - name: "Enabled Node.js repo key is absent"
+      ansible.builtin.rpm_key:
+        key: https://rpm.nodesource.com/gpgkey/ns-operations-public.key
+        state: absent
+      notify:
+        - "Update dnf cache"
+        - "Update yum cache"
 
-- name: "Ensure NodeSource repository is added for Node.js {{ nodejs_version }}"
-  ansible.builtin.yum_repository:
-    baseurl: "https://rpm.nodesource.com/pub_{{ nodejs_version }}.x/nodistro/nodejs/{{ ansible_architecture }}"
-    description: "Node.js Packages for Linux RPM based distros - {{ ansible_architecture }}"
-    enabled: true
-    file: "nodesource-nodejs"
-    gpgcheck: true
-    gpgkey: https://rpm.nodesource.com/gpgkey/ns-operations-public.key
-    module_hotfixes: true
-    name: "nodesource-nodejs"
-    priority: 9
-    state: present
-  notify:
-    - "Update dnf cache"
-    - "Update yum cache"
-    - "Remove Node.js"
+    - name: "Ensure NodeSource repository is removed for Node.js {{ nodejs_version }}"
+      ansible.builtin.yum_repository:
+        baseurl: "https://rpm.nodesource.com/pub_{{ nodejs_version }}.x/nodistro/nodejs/{{ ansible_architecture }}"
+        description: "Node.js Packages for Linux RPM based distros - {{ ansible_architecture }}"
+        enabled: true
+        file: "nodesource-nodejs"
+        gpgcheck: true
+        gpgkey: https://rpm.nodesource.com/gpgkey/ns-operations-public.key
+        module_hotfixes: true
+        name: "nodesource-nodejs"
+        priority: 9
+        state: absent
+      notify:
+        - "Update dnf cache"
+        - "Update yum cache"
+        - "Remove Node.js"
 
-- name: "Flush handlers"
-  ansible.builtin.meta: flush_handlers
+    - name: "Flush handlers"
+      ansible.builtin.meta: flush_handlers
 
-- name: "Check available Node.js version in the repository"
-  ansible.builtin.command:
-    cmd: dnf --showduplicates list nodejs
-  register: nodejs_available_versions
-  changed_when: false
+    - name: "Check available Node.js version in the repository"
+      ansible.builtin.command:
+        cmd: dnf --showduplicates list nodejs
+      register: nodejs_available_versions
+      changed_when: false
 
-- name: "Set available Node.js version"
-  ansible.builtin.set_fact:
-    available_nodejs_version: "{{ nodejs_available_versions.stdout | regex_findall('2:(\\d+)\\.') | map('int') | max }}"
+    - name: "Set available Node.js version"
+      ansible.builtin.set_fact:
+        available_nodejs_version: "{{ nodejs_available_versions.stdout | regex_findall('2:(\\d+)\\.') | map('int') | max }}"
 
-- name: "Display available Node.js version to install"
-  ansible.builtin.debug:
-    msg: "{{ 'Node.js ' + available_nodejs_version + ' is available to install' if available_nodejs_version is defined and available_nodejs_version != '' else 'Node.js is not available to install' }}"
+    - name: "Display available Node.js version to install"
+      ansible.builtin.debug:
+        msg: "{{ 'Node.js ' + available_nodejs_version + ' is available to install' if available_nodejs_version is defined and available_nodejs_version != '' else 'Node.js is not available to install' }}"
+
+- name: "Add Nodesource repository"
+  when: nodejs_version != "distro" and nodejs_state == "present"
+  block:
+    - name: "Enabled Node.js repo key is present"
+      ansible.builtin.rpm_key:
+        key: https://rpm.nodesource.com/gpgkey/ns-operations-public.key
+        state: present
+      notify:
+        - "Update dnf cache"
+        - "Update yum cache"
+
+    - name: "Ensure NodeSource repository is added for Node.js {{ nodejs_version }}"
+      ansible.builtin.yum_repository:
+        baseurl: "https://rpm.nodesource.com/pub_{{ nodejs_version }}.x/nodistro/nodejs/{{ ansible_architecture }}"
+        description: "Node.js Packages for Linux RPM based distros - {{ ansible_architecture }}"
+        enabled: true
+        file: "nodesource-nodejs"
+        gpgcheck: true
+        gpgkey: https://rpm.nodesource.com/gpgkey/ns-operations-public.key
+        module_hotfixes: true
+        name: "nodesource-nodejs"
+        priority: 9
+        state: present
+      notify:
+        - "Update dnf cache"
+        - "Update yum cache"
+        - "Remove Node.js"
+
+    - name: "Flush handlers"
+      ansible.builtin.meta: flush_handlers
+
+    - name: "Check available Node.js version in the repository"
+      ansible.builtin.command:
+        cmd: dnf --showduplicates list nodejs
+      register: nodejs_available_versions
+      changed_when: false
+
+    - name: "Set available Node.js version"
+      ansible.builtin.set_fact:
+        available_nodejs_version: "{{ nodejs_available_versions.stdout | regex_findall('2:(\\d+)\\.') | map('int') | max }}"
+
+    - name: "Display available Node.js version to install"
+      ansible.builtin.debug:
+        msg: "{{ 'Node.js ' + available_nodejs_version + ' is available to install' if available_nodejs_version is defined and available_nodejs_version != '' else 'Node.js is not available to install' }}"
