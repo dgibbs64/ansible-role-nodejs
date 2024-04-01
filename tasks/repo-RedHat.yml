@@ -83,7 +83,7 @@
 
 - name: "Set available Node.js version"
   ansible.builtin.set_fact:
-    available_nodejs_version: "{{ nodejs_available_versions.stdout | regex_findall('2:(\\d+)\\.') | map('int') | max }}"
+    available_nodejs_version: "{{ nodejs_available_versions.stdout | regex_findall('(\\d+)\\.') | map('int') | max }}"
 
 - name: "Display available Node.js version to install"
   ansible.builtin.debug:
