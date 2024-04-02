@@ -19,6 +19,12 @@
   when:
     - (ansible_os_family == 'RedHat' and ansible_distribution_version is version('8', '<')) or (ansible_distribution == 'Ubuntu' and ansible_distribution_version is version('18.04', '<=')) or (ansible_distribution == 'openSUSE')
 
+- name: "Ensure rpm-python is installed"
+  ansible.builtin.package:
+    name: python3-rpm
+    state: present
+  when: ansible_os_family == 'RedHat'
+
 - name: "Install requirements"
   block:
     - name: "Ensure Node.js requirements are installed (apt)"
