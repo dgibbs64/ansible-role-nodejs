@@ -2,28 +2,28 @@
 - name: "Display if architecture is not supported"
   ansible.builtin.debug:
     msg: "{{ ansible_architecture }} architecture is not supported"
-  when: ansible_architecture not in ['x86_64', 'aarch64', 'armv7l']
+  when: ansible_architecture not in ["x86_64", "aarch64", "armv7l"]
 
 - name: "Skip role if architecture is not supported"
   ansible.builtin.meta: end_play
-  when: ansible_architecture not in ['x86_64', 'aarch64', 'armv7l']
+  when: ansible_architecture not in ["x86_64", "aarch64", "armv7l"]
 
 - name: "Display if distro is not supported"
   ansible.builtin.debug:
     msg: "{{ ansible_distribution }} {{ ansible_distribution_version }} is not supported"
   when:
-    - (ansible_os_family == 'RedHat' and ansible_distribution_version is version('8', '<')) or (ansible_distribution == 'Ubuntu' and ansible_distribution_version is version('18.04', '<=')) or (ansible_os_family == "Suse")
+    - (ansible_os_family == "RedHat" and ansible_distribution_version is version("8", "<")) or (ansible_distribution == "Ubuntu" and ansible_distribution_version is version("18.04", "<=")) or (ansible_os_family == "Suse")
 
 - name: "Skip role if distro version is supported"
   ansible.builtin.meta: end_play
   when:
-    - (ansible_os_family == 'RedHat' and ansible_distribution_version is version('8', '<')) or (ansible_distribution == 'Ubuntu' and ansible_distribution_version is version('18.04', '<=')) or (ansible_os_family == "Suse")
+    - (ansible_os_family == "RedHat" and ansible_distribution_version is version("8", "<")) or (ansible_distribution == "Ubuntu" and ansible_distribution_version is version("18.04", "<=")) or (ansible_os_family == "Suse")
 
 - name: "Ensure rpm-python is installed (rpm)"
   ansible.builtin.package:
     name: python3-rpm
     state: present
-  when: ansible_os_family == 'RedHat'
+  when: ansible_os_family == "RedHat"
 
 - name: "Install requirements (apt)"
   block:

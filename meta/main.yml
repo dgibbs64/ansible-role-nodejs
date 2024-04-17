@@ -21,14 +21,13 @@ galaxy_info:
         - "buster"
     - name: EL
       versions:
-        - "7"
         - "8"
         - "9"
     - name: Fedora
       versions:
+        - "39"
         - "38"
         - "37"
-        - "36"
     - name: opensuse
       versions:
         - "15.4"
