@@ -28,10 +28,6 @@ galaxy_info:
         - "39"
         - "38"
         - "37"
-    - name: opensuse
-      versions:
-        - "15.4"
-        - "15.3"
     - name: Amazon Linux
       versions:
         - "2023"
