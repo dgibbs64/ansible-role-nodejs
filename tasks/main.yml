@@ -8,8 +8,8 @@
   run_once: true
   delegate_to: localhost
 
-- name: "Check Requirements"
-  ansible.builtin.include_tasks: check-requirements.yml
+- name: "Distro Requirements"
+  ansible.builtin.include_tasks: distro-requirements.yml
 
 - name: "Become block"
   become: true
