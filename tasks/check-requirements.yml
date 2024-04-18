@@ -4,10 +4,6 @@
     msg: "{{ ansible_architecture }} architecture is not supported"
   when: ansible_architecture not in supported_architectures
 
-- name: "Skip role if architecture is not supported"
-  ansible.builtin.meta: end_play
-  when: ansible_architecture not in supported_architectures
-
 - name: "Check if distro is in supported distros list"
   ansible.builtin.set_fact:
     distro_supported: false
@@ -35,6 +31,6 @@
   no_log: true
   when: distro_supported is false and "molecule-notest" in ansible_skip_tags
 
-- name: "Skip role if distro is not supported"
+- name: "Skip role if architecture or distro is not supported"
   ansible.builtin.meta: end_play
-  when: distro_supported is false
+  when: ansible_architecture not in supported_architectures or distro_supported is false
