@@ -77,13 +77,14 @@
 
 - name: "Check available Node.js version in the repository"
   ansible.builtin.command:
-    cmd: dnf --showduplicates list nodejs
+    cmd: dnf -q --showduplicates list nodejs
   register: nodejs_available_versions
   changed_when: false
 
 - name: "Set available Node.js version"
   ansible.builtin.set_fact:
-    available_nodejs_version: "{{ nodejs_available_versions.stdout | regex_findall('(\\d+)\\.') | map('int') | max }}"
+    available_nodejs_version: "{{ nodejs_available_versions.stdout | regex_findall('nodejs.x86_64\\s+\\d+:([0-9.]+)') | map('split', '.') | map('first') | map('int') | max }}"
+  when: nodejs_available_versions.stdout | length > 0
 
 - name: "Display available Node.js version to install"
   ansible.builtin.debug:
