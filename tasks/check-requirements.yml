@@ -1,8 +1,4 @@
 ---
-- name: "Define supported architectures"
-  ansible.builtin.set_fact:
-    supported_architectures: ["x86_64", "aarch64", "armv7l"]
-
 - name: "Display if architecture is not supported"
   ansible.builtin.debug:
     msg: "{{ ansible_architecture }} architecture is not supported"

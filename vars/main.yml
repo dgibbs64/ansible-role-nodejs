@@ -10,3 +10,5 @@ supported_distros:
   - { name: "RedHat", min_version: "8" }
   - { name: "Rocky", min_version: "8" }
   - { name: "Ubuntu", min_version: "20.04" }
+
+supported_architectures: ["x86_64", "aarch64", "armv7l"]
