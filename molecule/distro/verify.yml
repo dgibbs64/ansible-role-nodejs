@@ -3,5 +3,18 @@
   hosts: all
   gather_facts: false
   tasks:
-    - name: "Check if connection still works"
-      ansible.builtin.ping:
+    - name: "Check if /tmp/unsupported_distro file exists"
+      ansible.builtin.stat:
+        path: "/tmp/unsupported_distro"
+      register: unsupported_distro_file
+
+    - name: "Check if Node.js is installed"
+      ansible.builtin.command: node -v
+      register: nodejs_version
+      changed_when: false
+      when: not unsupported_distro_file.stat.exists
+
+    - name: "Display Node.js version"
+      ansible.builtin.debug:
+        msg: "Node.js version: {{ nodejs_version.stdout }}"
+      when: nodejs_version is defined and 'stdout' in nodejs_version

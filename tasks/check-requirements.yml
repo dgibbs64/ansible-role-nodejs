@@ -45,6 +45,15 @@
     msg: "{{ ansible_distribution }} {{ ansible_distribution_version }} is not supported"
   when: distro_supported is false
 
+# For molecule testing only
+- name: "Create file if distro is not supported"
+  ansible.builtin.copy:
+    dest: "/tmp/unsupported_distro"
+    content: "unsupported"
+    mode: "0644"
+  no_log: true
+  when: distro_supported is false and "molecule-notest" in ansible_skip_tags
+
 - name: "Skip role if distro is not supported"
   ansible.builtin.meta: end_play
   when: distro_supported is false
