@@ -1,0 +1,12 @@
+---
+supported_distros:
+  - { name: "Alma", min_version: "8" }
+  - { name: "Amazon", min_version: "2023" }
+  - { name: "CentOS", min_version: "8" }
+  - { name: "Debian", min_version: "10" }
+  - { name: "Fedora", min_version: "29" }
+  - { name: "OracleLinux", min_version: "8" }
+  - { name: "Pop!_OS", min_version: "20.04" }
+  - { name: "RedHat", min_version: "8" }
+  - { name: "Rocky", min_version: "8" }
+  - { name: "Ubuntu", min_version: "20.04" }
