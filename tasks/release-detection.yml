@@ -4,22 +4,32 @@
     url: https://nodejs.org/download/release/index.json
     return_content: true
   register: response
+  run_once: true
+  delegate_to: localhost
 
 - name: "Find the current release version"
   ansible.builtin.set_fact:
     nodejs_version_current: "{{ response.json | json_query('[*].version') | map('regex_replace', '^v([0-9]+).*$', '\\1') | map('int') | list | max }}"
+  run_once: true
+  delegate_to: localhost
 
 - name: "Display the current release version"
   ansible.builtin.debug:
     msg: "The current release version is {{ nodejs_version_current }}"
+  run_once: true
+  delegate_to: localhost
 
 - name: "Find the current LTS release version"
   ansible.builtin.set_fact:
     nodejs_version_lts: "{{ ((response.json | selectattr('lts', 'defined') | selectattr('lts', '!=', false) | list | first).version | regex_replace('^v([0-9]+).*$', '\\1')) }}"
+  run_once: true
+  delegate_to: localhost
 
 - name: "Display the lts release version"
   ansible.builtin.debug:
     msg: "The lts release version is {{ nodejs_version_lts }}"
+  run_once: true
+  delegate_to: localhost
 
 - name: "Update nodejs_version to nodejs_version_current"
   ansible.builtin.set_fact:
