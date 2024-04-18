@@ -5,12 +5,12 @@
 
 - name: "Set if Node.js is installed"
   ansible.builtin.set_fact:
-    nodejs_installed: ansible_facts.packages is defined and 'nodejs' in ansible_facts.packages
+    nodejs_installed: ansible_facts.packages is defined and "nodejs" in ansible_facts.packages
 
 - name: "Set installed Node.js version"
   ansible.builtin.set_fact:
     installed_nodejs_version: "{{ ansible_facts.packages['nodejs'][0].version.split('.')[0] }}"
-  when: nodejs_installed and 'nodejs' in ansible_facts.packages
+  when: nodejs_installed and "nodejs" in ansible_facts.packages
 
 - name: "Display installed Node.js version"
   ansible.builtin.debug:

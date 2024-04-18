@@ -1,52 +1,50 @@
 ---
+- name: "Define supported architectures"
+  ansible.builtin.set_fact:
+    supported_architectures: ["x86_64", "aarch64", "armv7l"]
+
 - name: "Display if architecture is not supported"
   ansible.builtin.debug:
     msg: "{{ ansible_architecture }} architecture is not supported"
-  when: ansible_architecture not in ["x86_64", "aarch64", "armv7l"]
+  when: ansible_architecture not in supported_architectures
 
 - name: "Skip role if architecture is not supported"
   ansible.builtin.meta: end_play
-  when: ansible_architecture not in ["x86_64", "aarch64", "armv7l"]
+  when: ansible_architecture not in supported_architectures
+
+- name: "Define supported distros and versions"
+  ansible.builtin.set_fact:
+    supported_distros:
+      - { name: "Alma", min_version: "8" }
+      - { name: "Amazon", min_version: "2023" }
+      - { name: "CentOS", min_version: "8" }
+      - { name: "Debian", min_version: "10" }
+      - { name: "Fedora", min_version: "29" }
+      - { name: "OracleLinux", min_version: "8" }
+      - { name: "Pop!_OS", min_version: "20.04" }
+      - { name: "RedHat", min_version: "8" }
+      - { name: "Rocky", min_version: "8" }
+      - { name: "Ubuntu", min_version: "20.04" }
+    distro_supported: true
+
+- name: "Check if distro is in supported distros list"
+  ansible.builtin.set_fact:
+    distro_supported: false
+  when: supported_distros | selectattr("name", "equalto", ansible_distribution) | list | length == 0
+
+- name: "Check if distro version is supported"
+  ansible.builtin.set_fact:
+    distro_supported: false
+  loop: "{{ supported_distros }}"
+  when: >
+    ansible_distribution == item.name and
+    ansible_distribution_version is version(item.min_version, "<")
 
 - name: "Display if distro is not supported"
   ansible.builtin.debug:
     msg: "{{ ansible_distribution }} {{ ansible_distribution_version }} is not supported"
-  when:
-    - (ansible_os_family == "RedHat" and ansible_distribution_version is version("8", "<")) or (ansible_distribution == "Ubuntu" and ansible_distribution_version is version("18.04", "<=")) or (ansible_os_family == "Suse")
+  when: distro_supported is false
 
-- name: "Skip role if distro version is supported"
+- name: "Skip role if distro is not supported"
   ansible.builtin.meta: end_play
-  when:
-    - (ansible_os_family == "RedHat" and ansible_distribution_version is version("8", "<")) or (ansible_distribution == "Ubuntu" and ansible_distribution_version is version("18.04", "<=")) or (ansible_os_family == "Suse")
-
-- name: "Ensure rpm-python is installed (rpm)"
-  ansible.builtin.package:
-    name: python3-rpm
-    state: present
-  when: ansible_os_family == "RedHat"
-
-- name: "Install requirements (apt)"
-  block:
-    - name: "Ensure Node.js requirements are installed (apt)"
-      ansible.builtin.apt:
-        name:
-          - apt-transport-https
-          - ca-certificates
-          - curl
-          - gnupg
-          - python3-debian
-        state: present
-        update_cache: true
-        cache_valid_time: 3600
-      when: ansible_pkg_mgr == "apt"
-  rescue:
-    - name: "Ensure Node.js requirements are installed (apt)"
-      ansible.builtin.apt:
-        name:
-          - apt-transport-https
-          - ca-certificates
-          - curl
-          - gnupg
-          - python3-debian
-        state: present
-      when: ansible_pkg_mgr == "apt"
+  when: distro_supported is false

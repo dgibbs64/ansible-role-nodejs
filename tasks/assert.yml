@@ -1,0 +1,15 @@
+---
+- name: "Test if nodejs_version is set correctly"
+  ansible.builtin.assert:
+    that:
+      - nodejs_version is defined
+      - (nodejs_version is string and nodejs_version in ["lts", "current", "distro"]) or (nodejs_version | int is number and nodejs_version | int > 0)
+    quiet: true
+
+- name: "Test if nodejs_state is set correctly"
+  ansible.builtin.assert:
+    that:
+      - nodejs_state is defined
+      - nodejs_state is string
+      - nodejs_state in ["absent", "present"]
+    quiet: true

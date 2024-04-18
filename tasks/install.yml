@@ -3,8 +3,6 @@
   ansible.builtin.apt:
     name: nodejs
     state: present
-    update_cache: true
-    cache_valid_time: 3600
   when: ansible_pkg_mgr == "apt"
 
 - name: "Ensure Node.js is installed (yum)"

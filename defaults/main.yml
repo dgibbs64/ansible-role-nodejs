@@ -1,5 +1,5 @@
 ---
-# nodejs version (lts|current|distro)
+# nodejs version (lts|current|distro|<version>)
 nodejs_version: lts
 # nodejs state (absent|present)
 nodejs_state: present

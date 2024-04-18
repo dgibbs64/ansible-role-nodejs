@@ -4,18 +4,19 @@
   ansible.builtin.apt:
     clean: true
     update_cache: true
+  when: ansible_pkg_mgr == "apt"
 
 - name: "Update dnf cache"
   become: true
   ansible.builtin.dnf:
     update_cache: true
-  when: ansible_pkg_mgr == 'dnf'
+  when: ansible_pkg_mgr == "dnf"
 
 - name: "Update yum cache"
   become: true
   ansible.builtin.yum:
     update_cache: true
-  when: ansible_pkg_mgr == 'yum'
+  when: ansible_pkg_mgr == "yum"
 
 - name: "Remove Node.js"
   become: true
