@@ -21,7 +21,26 @@ _Note: this role does not use the nvm method to install Node.JS._
 
 ## Requirements
 
-None.
+### Supported Distros
+
+- AlmaLinux >= 8
+- AmazonLinux 2023
+- CentOS >= 8
+- Debian >= 10
+- Fedora >= 29
+- OracleLinux >= 8
+- Pop!\_OS >= 20.04
+- Redhat Enterprise Linux >= 8
+- Rocky Linux >= 8
+- Ubuntu >= 20.04
+
+### Supported Architectures
+
+- x86_64
+- aarch64
+- armv7l
+
+_Note: if there are any more Debian or RedHat Based distros that are supported please let me know._
 
 ## Role Variables
 

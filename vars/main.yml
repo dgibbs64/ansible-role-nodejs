@@ -1,14 +1,11 @@
 ---
 supported_distros:
-  - { name: "Alma", min_version: "8" }
-  - { name: "Amazon", min_version: "2023" }
-  - { name: "CentOS", min_version: "8" }
-  - { name: "Debian", min_version: "10" }
-  - { name: "Fedora", min_version: "29" }
-  - { name: "OracleLinux", min_version: "8" }
-  - { name: "Pop!_OS", min_version: "20.04" }
-  - { name: "RedHat", min_version: "8" }
-  - { name: "Rocky", min_version: "8" }
-  - { name: "Ubuntu", min_version: "20.04" }
-
-supported_architectures: ["x86_64", "aarch64", "armv7l"]
+  - { name: "AlmaLinux", min_version: "8", supported_architectures: "['x86_64', 'aarch64', 'armv7l']" }
+  - { name: "Amazon", min_version: "2023", supported_architectures: "['x86_64', 'aarch64', 'armv7l']" }
+  - { name: "CentOS", min_version: "8", supported_architectures: "['x86_64', 'aarch64', 'armv7l']" }
+  - { name: "Debian", min_version: "10", supported_architectures: "['x86_64', 'aarch64', 'armv7l']" }
+  - { name: "Fedora", min_version: "37", supported_architectures: "['x86_64', 'aarch64', 'armv7l']" }
+  - { name: "OracleLinux", min_version: "8", supported_architectures: "['x86_64', 'aarch64', 'armv7l']" }
+  - { name: "RedHat", min_version: "8", supported_architectures: "['x86_64', 'aarch64', 'armv7l']" }
+  - { name: "Rocky", min_version: "8", supported_architectures: "['x86_64', 'aarch64', 'armv7l']" }
+  - { name: "Ubuntu", min_version: "20.04", supported_architectures: "['x86_64', 'aarch64', 'armv7l']" }

@@ -1,25 +1,15 @@
 ---
-- name: "Display if architecture is not supported"
-  ansible.builtin.debug:
-    msg: "{{ ansible_architecture }} architecture is not supported"
-  when: ansible_architecture not in supported_architectures
-
-- name: "Check if distro is in supported distros list"
+- name: "Check if distro or architecture are supported"
   ansible.builtin.set_fact:
     distro_supported: false
-  when: supported_distros | selectattr("name", "equalto", ansible_distribution) | list | length == 0
-
-- name: "Check if distro version is supported"
-  ansible.builtin.set_fact:
-    distro_supported: false
-  loop: "{{ supported_distros }}"
   when: >
-    ansible_distribution == item.name and
-    ansible_distribution_version is version(item.min_version, "<")
+    supported_distros | selectattr("name", "equalto", ansible_distribution) | list | length == 0 or
+    ansible_distribution_version is version(supported_distros | selectattr("name", "equalto", ansible_distribution) | map(attribute="min_version") | first, "<") or
+    ansible_architecture not in (supported_distros | selectattr("name", "equalto", ansible_distribution) | map(attribute="supported_architectures", default=[]) | first)
 
-- name: "Display if distro is not supported"
+- name: "Check if distro or architecture are supported"
   ansible.builtin.debug:
-    msg: "{{ ansible_distribution }} {{ ansible_distribution_version }} is not supported"
+    msg: "{{ ansible_distribution }} {{ ansible_distribution_version }} on {{ ansible_architecture }} is not supported"
   when: distro_supported is false
 
 # For molecule testing only
@@ -31,6 +21,6 @@
   no_log: true
   when: distro_supported is false and "molecule-notest" in ansible_skip_tags
 
-- name: "Skip role if architecture or distro is not supported"
+- name: "Skip role if distro or architecture is not supported"
   ansible.builtin.meta: end_play
-  when: ansible_architecture not in supported_architectures or distro_supported is false
+  when: distro_supported is false
