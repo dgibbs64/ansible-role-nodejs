@@ -69,6 +69,7 @@
         components: main
         state: present
         enabled: true
+        architectures: "{{ ansible_architecture }}"
       notify:
         - "Update apt cache"
         - "Remove Node.js"
