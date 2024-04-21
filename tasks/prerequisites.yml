@@ -1,10 +1,4 @@
 ---
-- name: "Ensure rpm-python is installed (rpm)"
-  ansible.builtin.package:
-    name: python3-rpm
-    state: present
-  when: ansible_os_family == "RedHat"
-
 - name: "Ensure Node.js requirements are installed (apt)"
   ansible.builtin.apt:
     name:
@@ -17,3 +11,17 @@
     update_cache: true
     cache_valid_time: 3600
   when: ansible_pkg_mgr == "apt"
+
+- name: "Ensure rpm-python is installed (dnf)"
+  ansible.builtin.dnf:
+    name: python3-rpm
+    state: present
+    update_cache: true
+  when: ansible_pkg_mgr == "dnf"
+
+- name: "Ensure rpm-python is installed (yum)"
+  ansible.builtin.yum:
+    name: python3-rpm
+    state: present
+    update_cache: true
+  when: ansible_pkg_mgr == "yum"
