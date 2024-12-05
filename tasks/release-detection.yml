@@ -7,7 +7,7 @@
   run_once: true
   delegate_to: localhost
 
-- name: "Find the current release version"
+- name: "Find the current release version"  # noqa
   ansible.builtin.set_fact:
     nodejs_version_current: "{{ response.json | json_query('[*].version') | map('regex_replace', '^v([0-9]+).*$', '\\1') | map('int') | list | max }}"
   run_once: true
