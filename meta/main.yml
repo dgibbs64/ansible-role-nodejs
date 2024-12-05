@@ -4,7 +4,7 @@ galaxy_info:
   company: none
   description: Setup Node.js.
   license: MIT
-  min_ansible_version: "2.16"
+  min_ansible_version: "2.18"
   namespace: dgibbs64
   role_name: nodejs
 
@@ -21,7 +21,6 @@ galaxy_info:
     - name: EL
       versions:
         - "9"
-        - "8"
     - name: Fedora
       versions:
         - "40"

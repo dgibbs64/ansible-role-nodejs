@@ -7,18 +7,11 @@
   when: ansible_pkg_mgr == "apt"
 
 - name: "Ensure Node.js is installed (dnf)"
-  ansible.builtin.yum:
+  ansible.builtin.dnf:
     name: nodejs
     state: present
     update_cache: true
   when: ansible_pkg_mgr == "dnf"
-
-- name: "Ensure Node.js is installed (yum)"
-  ansible.builtin.yum:
-    name: nodejs
-    state: present
-    update_cache: true
-  when: ansible_pkg_mgr == "yum"
 
 - name: "Gather package facts"
   ansible.builtin.package_facts:
