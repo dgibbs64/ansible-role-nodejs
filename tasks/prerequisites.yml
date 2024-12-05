@@ -18,10 +18,3 @@
     state: present
     update_cache: true
   when: ansible_pkg_mgr == "dnf"
-
-- name: "Ensure rpm-python is installed (yum)"
-  ansible.builtin.yum:
-    name: python3-rpm
-    state: present
-    update_cache: true
-  when: ansible_pkg_mgr == "yum"
