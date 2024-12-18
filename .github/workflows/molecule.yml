@@ -52,7 +52,6 @@ jobs:
           - ubuntu2404
         ansible_core_version:
           - 2.16
-          - 2.18
           - latest
         exclude:
           - distro: rockylinux8
