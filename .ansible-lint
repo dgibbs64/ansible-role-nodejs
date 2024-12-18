@@ -5,4 +5,3 @@ exclude_paths:
 
 skip_list:
   - "403"
-  - "jinja[invalid]"
