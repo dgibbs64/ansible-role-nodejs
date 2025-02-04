@@ -17,17 +17,15 @@ galaxy_info:
     - name: Debian
       versions:
         - "bookworm"
-        - "bullseye"
     - name: EL
       versions:
         - "9"
     - name: Fedora
       versions:
-        - "40"
-        - "39"
+        - "41"
     - name: opensuse
       versions:
-        - "15.5"
+        - "15.6"
     - name: Amazon Linux
       versions:
         - "2023"
