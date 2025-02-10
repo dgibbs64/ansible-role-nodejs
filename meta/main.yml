@@ -22,7 +22,7 @@ galaxy_info:
         - "9"
     - name: Fedora
       versions:
-        - "41"
+        - "all"
     - name: Amazon Linux
       versions:
         - "2023"
