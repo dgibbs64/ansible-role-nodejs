@@ -29,7 +29,7 @@ jobs:
           yamllint .
 
       - name: Run ansible-lint
-        uses: ansible/ansible-lint@v25.1.1
+        uses: ansible/ansible-lint@v25
 
   molecule:
     name: Molecule
@@ -71,7 +71,7 @@ jobs:
         if: matrix.ansible_core_version == 'latest'
 
       - name: Secrets to env
-        uses: oNaiPs/secrets-to-env-action@v1.5
+        uses: oNaiPs/secrets-to-env-action@v1
         with:
           secrets: "${{ toJSON(secrets) }}"
 
