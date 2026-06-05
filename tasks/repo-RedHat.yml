@@ -14,7 +14,7 @@
 
 - name: "Display installed Node.js version"
   ansible.builtin.debug:
-    msg: "{{ 'Node.js ' + installed_nodejs_version + ' is installed' if installed_nodejs_version is defined and installed_nodejs_version != '' else 'Node.js is not installed' }}"
+    msg: "{{ 'Node.js ' ~ installed_nodejs_version ~ ' is installed' if installed_nodejs_version is defined and installed_nodejs_version != '' else 'Node.js is not installed' }}"
 
 - name: "Remove Nodesource repository"
   when: nodejs_version == "distro" or nodejs_state == "absent"
@@ -88,4 +88,4 @@
 
 - name: "Display available Node.js version to install"
   ansible.builtin.debug:
-    msg: "{{ 'Node.js ' + available_nodejs_version + ' is available to install' if available_nodejs_version is defined and available_nodejs_version != '' else 'Node.js is not available to install' }}"
+    msg: "{{ 'Node.js ' ~ available_nodejs_version ~ ' is available to install' if available_nodejs_version is defined and available_nodejs_version != '' else 'Node.js is not available to install' }}"
