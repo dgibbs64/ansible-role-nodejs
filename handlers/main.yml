@@ -12,6 +12,12 @@
     update_cache: true
   when: ansible_pkg_mgr == "dnf"
 
+- name: "Update yum cache"
+  become: true
+  ansible.builtin.dnf:
+    update_cache: true
+  when: ansible_pkg_mgr in ['dnf', 'yum']
+
 - name: "Remove Node.js"
   become: true
   ansible.builtin.package:

@@ -4,9 +4,9 @@
     path: /usr/share/keyrings/nodesource.gpg
     state: absent
 
-- name: "Remove NodeSource GPG key from APT keyring"
-  ansible.builtin.apt_key:
-    id: "68576280"
+- name: "Remove legacy NodeSource GPG key from APT keyring"
+  ansible.builtin.file:
+    path: /etc/apt/trusted.gpg.d/nodesource.gpg
     state: absent
 
 - name: "Ensure /etc/apt/sources.list.d/nodesource.list is removed"
