@@ -48,8 +48,6 @@ jobs:
           - debian11
           - debian12
           - debian13
-          - opensuseleap15
-          - rockylinux8
           - rockylinux9
           - rockylinux10
           - ubuntu2204

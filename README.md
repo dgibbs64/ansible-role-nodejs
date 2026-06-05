@@ -30,7 +30,6 @@ _Note: this role does not use the nvm method to install Node.JS._
 - Debian >= 11
 - Fedora >= 37
 - OracleLinux >= 9
-- openSUSE Leap >= 15
 - Redhat Enterprise Linux >= 9
 - Rocky Linux >= 9
 - Ubuntu >= 20.04

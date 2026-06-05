@@ -29,9 +29,6 @@ galaxy_info:
     - name: Amazon Linux
       versions:
         - "2023"
-    - name: opensuse
-      versions:
-        - "all"
 
   galaxy_tags:
     - system
