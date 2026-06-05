@@ -3,7 +3,7 @@
 An [Ansible](https://www.ansible.com) role that installs [Node.js](https://nodejs.org) use the [nodesource](https://github.com/nodesource/distributions) repositories.
 
 <p align="center">
-  <img src="https://github.com/dgibbs64/ansible-role-nodejs/assets/4478206/ed4af0e0-f0c2-4329-b667-3d392c62582a">
+  <img src="https://github.com/dgibbs64/ansible-role-nodejs/assets/4478206/ed4af0e0-f0c2-4329-b667-3d392c62582a" alt="Ansible Node.js">
 <br>
 </p>
 <p align="center">
@@ -14,7 +14,9 @@ An [Ansible](https://www.ansible.com) role that installs [Node.js](https://nodej
 
 ## About
 
-[Node.js](https://nodejs.org) is a free, open-source, cross-platform JavaScript runtime environment that lets developers create servers, web apps, command line tools and scripts. This role installs Node.js using the [nodesource](https://github.com/nodesource/distributions) repositories to install the latest Node.js deb/rpm packages typically allowing for the installation of the newer version of Node.js than is available in the default distro repositories. This role can also remove Node.js and the nodesource repositories.
+[Node.js](https://nodejs.org) is a free, open-source, cross-platform JavaScript runtime environment that lets developers create servers, web apps, command line tools and scripts.
+
+This role installs Node.js using the [nodesource](https://github.com/nodesource/distributions) repositories, providing newer versions than are typically available in default distro repositories. The role can also remove Node.js and the nodesource repositories.
 
 _Note: this role does not use the nvm method to install Node.JS._
 

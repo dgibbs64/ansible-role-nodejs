@@ -31,7 +31,7 @@ galaxy_info:
         - "2023"
     - name: opensuse
       versions:
-        - "15.6"
+        - "all"
 
   galaxy_tags:
     - system
