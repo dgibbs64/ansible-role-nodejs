@@ -28,4 +28,4 @@
 
 - name: "Display installed Node.js version"
   ansible.builtin.debug:
-    msg: "{{ 'Node.js ' + installed_nodejs_version + ' is installed' if installed_nodejs_version is defined and installed_nodejs_version != '' else 'Node.js is not installed' }}"
+    msg: "{{ 'Node.js ' ~ installed_nodejs_version ~ ' is installed' if installed_nodejs_version is defined and installed_nodejs_version != '' else 'Node.js is not installed' }}"
